@@ -1,6 +1,16 @@
 # Rust version of Biological Circuit Design
 
 
+## Install jupyter rust notebook
+
+```shell
+apt install jupyter
+cargo install evcxr_jupyter
+evcxr_jupyter --install
+```
+
+```jupyter notebook```
+
 ## Links
 
 * https://github.com/Armavica/rebop/
