@@ -49,6 +49,7 @@ https://github.com/plotters-rs/plotters/issues/120
 * https://biocircuits.github.io/
 * https://doc.rust-lang.org/book/
 * https://datacrayon.com/shop/product/data-analysis-with-rust-notebooks/
+* https://biologicalmodeling.org
 
 ## Libraries
 
