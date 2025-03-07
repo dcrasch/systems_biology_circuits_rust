@@ -108,10 +108,9 @@ pub fn LineChart() -> Element {
         )
     });
     rsx! (
-    document::Script { src: asset!("/assets/echarts/echarts.min.js") },
+        document::Script { src: asset!("/assets/echarts/echarts.min.js") }
         div { style: "width: 100%; text-align: center;",
-              div { id: "chart", style: "display: inline-block;",
-            }
-          }
+            div { id: "chart", style: "display: inline-block;" }
+        }
     )
 }
