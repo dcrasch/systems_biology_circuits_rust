@@ -1,0 +1,31 @@
+[package]
+name = "dioxus-notebook"
+version = "0.1.0"
+authors = ["David Rasch <david.rasch@cwi.nl>"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+dioxus = { version = "0.6.0", features = ["router", "fullstack"] }
+charming = { git="https://github.com/yuankunzhang/charming.git",  features=["wasm","html"]}
+dioxus-logger = "0.6.2"
+ode_solvers = "0.6.1"
+
+[features]
+default = ["web"]
+web = ["dioxus/web"]
+desktop = ["dioxus/desktop"]
+mobile = ["dioxus/mobile"]
+
+[profile]
+
+[profile.wasm-dev]
+inherits = "dev"
+opt-level = 1
+
+[profile.server-dev]
+inherits = "dev"
+
+[profile.android-dev]
+inherits = "dev"
