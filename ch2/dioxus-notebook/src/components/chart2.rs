@@ -5,7 +5,8 @@ use ode_solvers::*;
 
 use charming::{
     component::{
-        Axis, Brush, BrushType, DataZoom, DataZoomType, Feature, Toolbox, ToolboxDataZoom, Legend, Title,
+        Axis, Brush, BrushType, DataZoom, DataZoomType, Feature, Legend, Title, Toolbox,
+        ToolboxDataZoom,
     },
     element::{
         formatter::FormatterFunction, AxisPointer, AxisType, Label, LabelPosition, MarkLine,
@@ -21,6 +22,8 @@ struct Model {
     gamma_m: f64,
     beta_p: f64,
     gamma_p: f64,
+    n : f64,
+    k : f64
 }
 
 type State = Vector2<f64>;
@@ -29,24 +32,29 @@ type Time = f64;
 impl ode_solvers::System<f64, State> for Model {
     // x(t) =  (self.beta / self.gamma) * (1.0- (-self.gamma*_t).exp());
     fn system(&self, _t: Time, x: &State, dx: &mut State) {
-        dx[0] = self.beta_m - self.gamma_m * x[0];
-	dx[1] = self.beta_p * x[0] - self.gamma_p * x[1];
+        let m = x[0];
+        let p: f64 = x[1];
+        let repression = 1.0 / ( 1.0 + (p/self.k).powf(self.n)); // repressive hill function
+        dx[0] = self.beta_m * repression - self.gamma_m * m;
+        dx[1] = self.beta_p * m - self.gamma_p * p;
     }
 }
 
 #[component]
-pub fn LineChart() -> Element {
+pub fn LineChart2() -> Element {
     let chart = use_signal(|| {
         let system = Model {
             beta_m: 1.0,
             gamma_m: 1.0,
-	    beta_p: 1.0,
-	    gamma_p: 0.1,
+            beta_p: 1.0,
+            gamma_p: 0.1,
+            k: 1.0,
+            n: 2.0
         };
-        let x = State::new(0.0,0.0);
+        let x = State::new(0.0, 0.0);
         let t = 0.0;
-        let t_end = 50.0;
-        let dt = 0.0015; // Step size to get ~4000 points
+        let t_end = 25.0;
+        let dt = 0.003; // Step size to get ~4000 points
 
         let mut stepper = Dopri5::new(system, t, t_end, dt, x, 1e-6_f64, 1e-6_f64);
         stepper.integrate().expect("failed integration");
@@ -58,15 +66,15 @@ pub fn LineChart() -> Element {
             .zip(stepper.y_out().iter())
             .map(|(x, y)| vec![*x, y[0]])
             .collect();
-	let series_p = stepper
+        let series_p = stepper
             .x_out()
             .iter()
             .zip(stepper.y_out().iter())
             .map(|(x, y)| vec![*x, y[1]])
             .collect();
         Chart::new()
-	    //.title(Title::new().text("Unregulated Expression").item_gap(25))
-	    .legend(Legend::new())
+            //.title(Title::new().text("Unregulated Expression").item_gap(25))
+            .legend(Legend::new())
             .x_axis(
                 Axis::new()
                     .name("Time")
@@ -81,7 +89,7 @@ pub fn LineChart() -> Element {
                 Axis::new()
                     .name("Concentration")
                     .min(0)
-                    .max(10)
+                    .max(2)
                     .name_gap(25)
                     .name_location(NameLocation::Middle),
             )
@@ -89,14 +97,14 @@ pub fn LineChart() -> Element {
                 Line::new()
                     .data(series_m) // blue
                     .show_symbol(false)
-                    .name("Concentration m")
-	    )
-	    .series(
+                    .name("Concentration m"),
+            )
+            .series(
                 Line::new()
                     .data(series_p)
                     .show_symbol(false)
-                    .name("Concentration p")
-	    )
+                    .name("Concentration p"),
+            )
             .data_zoom(DataZoom::new().type_(DataZoomType::Inside).realtime(true))
     });
     let renderer = use_signal(|| WasmRenderer::new(600, 400));
@@ -105,15 +113,15 @@ pub fn LineChart() -> Element {
         *echarts.write() = Some(
             renderer
                 .read_unchecked()
-                .render("chart", &chart.read())
+                .render("chart2", &chart.read())
                 .unwrap(),
         )
     });
     rsx! (
         document::Script { src: asset!("/assets/echarts/echarts.min.js") }
         div { style: "width: 100%; text-align: center;",
-            h1 { style: "color:black", "Unregulated Expression" }
-            div { id: "chart", style: "display: inline-block;" }
+            h1 { style: "color:black", "Negativly autoregulation Expression" }
+            div { id: "chart2", style: "display: inline-block;" }
         }
     )
 }
