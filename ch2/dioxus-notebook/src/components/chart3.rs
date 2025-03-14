@@ -29,6 +29,10 @@ pub fn LineChart3() -> Element {
 
     use_effect(move || {
         if let Some(Some(data)) = &*series.read() {
+
+            let series_s = data.0.iter().zip(data.1.iter()).map(|(x,y)|vec![*x,*y]).collect();
+            let series_i = data.0.iter().zip(data.2.iter()).map(|(x,y)|vec![*x,*y]).collect();
+            let series_r = data.0.iter().zip(data.3.iter()).map(|(x,y)|vec![*x,*y]).collect();
             let updated_chart = Chart::new()
                 .legend(Legend::new())
                 .x_axis(
@@ -40,15 +44,27 @@ pub fn LineChart3() -> Element {
                 )
                 .y_axis(
                     Axis::new()
-                        .name("Concentration")
+                        .name("S,I,R")
                         .name_gap(25)
                         .name_location(NameLocation::Middle),
                 )
                 .series(
                     Line::new()
-                        .data(data.clone()) // Use data safely
                         .show_symbol(false)
-                        .name("Concentration m"),
+                        .name("S")
+                        .data(series_s) // Use data safely
+                )
+                .series(
+                    Line::new()
+                        .show_symbol(false)
+                        .name("I")
+                        .data(series_i) // Use data safely
+                )
+                .series(
+                    Line::new()
+                        .show_symbol(false)
+                        .name("R")
+                        .data(series_r) // Use data safely
                 )
                 .data_zoom(DataZoom::new().type_(DataZoomType::Inside).realtime(true));
 
@@ -80,28 +96,35 @@ pub fn LineChart3() -> Element {
 }
 
 #[server]
-async fn get_sir_data() ->  Result<Vec<f64>, ServerFnError> {
+async fn get_sir_data() ->  Result<(Vec<f64>,Vec<f64>,Vec<f64>,Vec<f64>), ServerFnError> {
  // Return some meaningful data or simulate a fetch error
 
  #![allow(non_snake_case)]
 use rebop::define_system;
 
 define_system! {
-    r_inf r_heal;
+    r_infection r_healing;
     SIR { S, I, R }
-    infection   : S + I => 2 I @ r_inf
-    healing     : I     => R   @ r_heal
+    infection   : S + I => 2 I @ r_infection
+    healing     : I     => R   @ r_healing
 }
 
-    let mut num = Vec::new();
-    for _ in 0..10000 {
-        let mut problem = SIR::new();
-        problem.r_inf = 0.1 / 1000.;
-        problem.r_heal = 0.01;
-        problem.S = 999;
-        problem.I = 1;
-        problem.advance_until(250.);
-        num.push(problem.R as f64);
+    let mut series_t = Vec::new();
+    let mut series_s = Vec::new();
+    let mut series_i = Vec::new();
+    let mut series_r = Vec::new();
+
+    let mut problem = SIR::new();
+    problem.r_infection = 0.1 / 1000.;
+    problem.r_healing = 0.01;
+    problem.S = 999;
+    problem.I = 1;
+    for t in 0..250 {
+        problem.advance_until(t as f64);
+        series_s.push(problem.S as f64);
+        series_i.push(problem.I as f64);
+        series_r.push(problem.R as f64);
+        series_t.push(problem.t as f64);
     }
-    Ok(num)
+    Ok((series_t,series_s,series_i,series_r))
 }
