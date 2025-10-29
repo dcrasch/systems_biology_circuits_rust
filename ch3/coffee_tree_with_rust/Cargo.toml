@@ -1,0 +1,25 @@
+[package]
+name = "coffee_tree_with_rust"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+
+# Create random values
+rand = "0.9" 
+rand_chacha = "0.9"
+
+# solve ode models
+ode_solvers = "0.6.1"
+
+# data manipulation
+polars = { version="0.51.0", features=["lazy", "fmt"]}
+
+# Convert data from one version of Polars to another version of Polars
+df-interchange = { version = "0.2", features = ["polars_0_50", "polars_0_51"] }
+
+# plotting 
+plotlars = { version= "0.10.4", features=["static_export_default"] }
+
+# Markdown documents
+comrak = "0.45"
