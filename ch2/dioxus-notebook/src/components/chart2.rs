@@ -9,7 +9,7 @@ use charming::{
         ToolboxDataZoom,
     },
     element::{
-        formatter::FormatterFunction, AxisPointer, AxisType, Label, LabelPosition, MarkLine,
+        AxisPointer, AxisType, Label, LabelPosition, MarkLine,
         MarkLineData, MarkLineVariant, MarkPoint, MarkPointData, NameLocation, Symbol, Tooltip,
         Trigger,
     },
