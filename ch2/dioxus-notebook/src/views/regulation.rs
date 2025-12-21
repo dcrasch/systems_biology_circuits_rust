@@ -5,6 +5,6 @@ use dioxus::prelude::*;
 pub fn Regulation() -> Element {
     rsx! {
         LineChart1 {}
-	LineChart2 {}
+        LineChart2 {}
     }
 }

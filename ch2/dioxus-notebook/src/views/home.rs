@@ -1,21 +1,22 @@
-use crate::components::*;
 use dioxus::prelude::*;
+use crate::components::*;
+use comrak::{Options, markdown_to_html};
+
+const MARKDOWN_CSS: Asset = asset!("/assets/markdown.css");
+static MARKDOWN_SOURCE: &str = r#"
+## Welcome
+
+* [Dioxus](https://dioxuslabs.com/learn/0.7/)
+* [Tailwind](https://tailwindcss.com/docs/)
+"#;
 
 #[component]
 pub fn Home() -> Element {
     rsx! {
-    div {
-    class: "mx-auto max-w-7xl px-2 sm:px-6 lg:px-8",
-    	 h1 {
-	 "Welcome"
-	 }
-	 ul {
-	 class: "list-disc",
-	 
-         li {       a { href: "https://dioxuslabs.com/learn/0.7/", "Dioxus" }}
-	 li {       a { href: "https://tailwindcss.com/docs/", "Tailwind" }}
-
-            }	 
-    }
+        document::Link { rel: "stylesheet", href: MARKDOWN_CSS }
+        div {
+            class: "markdown-body",
+            dangerous_inner_html: markdown_to_html(MARKDOWN_SOURCE, &Options::default()),
+        }
     }
 }

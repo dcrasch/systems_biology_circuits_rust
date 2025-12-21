@@ -55,7 +55,7 @@ pub fn Navbar() -> Element {
                             img {
                                 class: "h-8 w-auto",
                                 src: CHEMICAL_SVG,
-                                alt: "Logo"
+                                alt: "Logo",
                             }
                         }
 
@@ -74,7 +74,7 @@ pub fn Navbar() -> Element {
                                     "SIR-model"
                                 }
 
- 				 Link {
+                                Link {
                                     to: Route::Regulation {},
                                     class: "rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white",
                                     "Regulation"
@@ -101,7 +101,7 @@ pub fn Navbar() -> Element {
                         "SIR-model"
                     }
 
-		      Link {
+                    Link {
                         to: Route::Regulation {},
                         class: "block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white",
                         "Regulation"
@@ -109,6 +109,6 @@ pub fn Navbar() -> Element {
                 }
             }
         }
-	Outlet::<Route> {}
+        div { class: "mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 mt-10", Outlet::<Route> {} }
     }
 }
