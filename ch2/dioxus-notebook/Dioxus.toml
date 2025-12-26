@@ -12,7 +12,7 @@ title = "dioxus-notebook"
 style = []
 
 # Additional JavaScript files
-script = []
+script = ["echarts/echarts.min.js"]
 
 [web.resource.dev]
 

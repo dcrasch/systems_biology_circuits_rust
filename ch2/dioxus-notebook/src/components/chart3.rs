@@ -80,7 +80,6 @@ pub fn LineChart3() -> Element {
     });
 
     rsx! (
-        document::Script { src: asset!("/assets/echarts/echarts.min.js") }
         div { style: "width: 100%; text-align: center;",
             h1 { style: "color:black", "SIR" }
             // Show loading spinner while waiting for data

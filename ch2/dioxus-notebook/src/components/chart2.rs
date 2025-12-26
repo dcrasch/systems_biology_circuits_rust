@@ -118,7 +118,6 @@ pub fn LineChart2() -> Element {
         )
     });
     rsx! (
-        document::Script { src: asset!("/assets/echarts/echarts.min.js") }
         div { style: "width: 100%; text-align: center;",
             h1 { style: "color:black", "Negativly autoregulation Expression" }
             div { id: "chart2", style: "display: inline-block;" }
