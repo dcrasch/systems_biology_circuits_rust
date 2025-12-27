@@ -4,6 +4,6 @@ use dioxus::prelude::*;
 #[component]
 pub fn Sir() -> Element {
     rsx! {
-        LineChart3 {}
+        LineChartSIR {}
     }
 }

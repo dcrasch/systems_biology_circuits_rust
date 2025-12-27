@@ -8,4 +8,4 @@ mod chart2;
 pub use chart2::LineChart2;
 
 mod chart3;
-pub use chart3::LineChart3;
+pub use chart3::LineChartSIR;
