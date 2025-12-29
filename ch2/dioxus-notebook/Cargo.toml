@@ -11,7 +11,6 @@ dioxus = { version = "0.7.2", features = ["router", "fullstack"] }
 charming = { git="https://github.com/yuankunzhang/charming.git",  features=["wasm","html"]}
 dioxus-logger = "0.7.2"
 ode_solvers = "0.6.1"
-rebop = { version="0.9.1", optional=true}
 comrak = "0.49.0"
 
 [features]
@@ -19,7 +18,7 @@ default = ["web"]
 web = ["dioxus/web"]
 desktop = ["dioxus/desktop"]
 mobile = ["dioxus/mobile"]
-server = ["dioxus/server", "dep:rebop"]
+server = ["dioxus/server"]
 
 [profile]
 
