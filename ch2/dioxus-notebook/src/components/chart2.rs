@@ -9,9 +9,8 @@ use charming::{
         ToolboxDataZoom,
     },
     element::{
-        AxisPointer, AxisType, Label, LabelPosition, MarkLine,
-        MarkLineData, MarkLineVariant, MarkPoint, MarkPointData, NameLocation, Symbol, Tooltip,
-        Trigger,
+        AxisPointer, AxisType, Label, LabelPosition, MarkLine, MarkLineData, MarkLineVariant,
+        MarkPoint, MarkPointData, NameLocation, Symbol, Tooltip, Trigger,
     },
     series::{Line, Scatter},
     Chart, ChartResize, HtmlRenderer, WasmRenderer,
@@ -22,8 +21,8 @@ struct Model {
     gamma_m: f64,
     beta_p: f64,
     gamma_p: f64,
-    n : f64,
-    k : f64
+    n: f64,
+    k: f64,
 }
 
 type State = Vector2<f64>;
@@ -34,7 +33,7 @@ impl ode_solvers::System<f64, State> for Model {
     fn system(&self, _t: Time, x: &State, dx: &mut State) {
         let m = x[0];
         let p: f64 = x[1];
-        let repression = 1.0 / ( 1.0 + (p/self.k).powf(self.n)); // repressive hill function
+        let repression = 1.0 / (1.0 + (p / self.k).powf(self.n)); // repressive hill function
         dx[0] = self.beta_m * repression - self.gamma_m * m;
         dx[1] = self.beta_p * m - self.gamma_p * p;
     }
@@ -49,7 +48,7 @@ pub fn LineChart2() -> Element {
             beta_p: 1.0,
             gamma_p: 0.1,
             k: 1.0,
-            n: 2.0
+            n: 2.0,
         };
         let x = State::new(0.0, 0.0);
         let t = 0.0;

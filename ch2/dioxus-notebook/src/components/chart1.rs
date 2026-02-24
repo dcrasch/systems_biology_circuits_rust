@@ -5,12 +5,12 @@ use ode_solvers::*;
 
 use charming::{
     component::{
-        Axis, Brush, BrushType, DataZoom, DataZoomType, Feature, Toolbox, ToolboxDataZoom, Legend, Title,
+        Axis, Brush, BrushType, DataZoom, DataZoomType, Feature, Legend, Title, Toolbox,
+        ToolboxDataZoom,
     },
     element::{
-        AxisPointer, AxisType, Label, LabelPosition, MarkLine,
-        MarkLineData, MarkLineVariant, MarkPoint, MarkPointData, NameLocation, Symbol, Tooltip,
-        Trigger,
+        AxisPointer, AxisType, Label, LabelPosition, MarkLine, MarkLineData, MarkLineVariant,
+        MarkPoint, MarkPointData, NameLocation, Symbol, Tooltip, Trigger,
     },
     series::{Line, Scatter},
     Chart, ChartResize, HtmlRenderer, WasmRenderer,
@@ -30,7 +30,7 @@ impl ode_solvers::System<f64, State> for Model {
     // x(t) =  (self.beta / self.gamma) * (1.0- (-self.gamma*_t).exp());
     fn system(&self, _t: Time, x: &State, dx: &mut State) {
         dx[0] = self.beta_m - self.gamma_m * x[0];
-	dx[1] = self.beta_p * x[0] - self.gamma_p * x[1];
+        dx[1] = self.beta_p * x[0] - self.gamma_p * x[1];
     }
 }
 
@@ -40,10 +40,10 @@ pub fn LineChart1() -> Element {
         let system = Model {
             beta_m: 1.0,
             gamma_m: 1.0,
-	    beta_p: 1.0,
-	    gamma_p: 0.1,
+            beta_p: 1.0,
+            gamma_p: 0.1,
         };
-        let x = State::new(0.0,0.0);
+        let x = State::new(0.0, 0.0);
         let t = 0.0;
         let t_end = 50.0;
         let dt = 0.0015; // Step size to get ~4000 points
@@ -58,15 +58,15 @@ pub fn LineChart1() -> Element {
             .zip(stepper.y_out().iter())
             .map(|(x, y)| vec![*x, y[0]])
             .collect();
-	let series_p = stepper
+        let series_p = stepper
             .x_out()
             .iter()
             .zip(stepper.y_out().iter())
             .map(|(x, y)| vec![*x, y[1]])
             .collect();
         Chart::new()
-	    //.title(Title::new().text("Unregulated Expression").item_gap(25))
-	    .legend(Legend::new())
+            //.title(Title::new().text("Unregulated Expression").item_gap(25))
+            .legend(Legend::new())
             .x_axis(
                 Axis::new()
                     .name("Time")
@@ -89,14 +89,14 @@ pub fn LineChart1() -> Element {
                 Line::new()
                     .data(series_m) // blue
                     .show_symbol(false)
-                    .name("Concentration m")
-	    )
-	    .series(
+                    .name("Concentration m"),
+            )
+            .series(
                 Line::new()
                     .data(series_p)
                     .show_symbol(false)
-                    .name("Concentration p")
-	    )
+                    .name("Concentration p"),
+            )
             .data_zoom(DataZoom::new().type_(DataZoomType::Inside).realtime(true))
     });
     let renderer = use_signal(|| WasmRenderer::new(600, 400));

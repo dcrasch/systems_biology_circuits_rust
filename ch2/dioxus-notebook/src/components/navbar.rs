@@ -5,8 +5,6 @@ const CHEMICAL_SVG: Asset = asset!("/assets/chemical.svg");
 #[component]
 pub fn Navbar() -> Element {
     let mut mobile_open = use_signal(|| false);
-    let mut profile_open = use_signal(|| false);
-
     rsx! {
         nav { class: "relative bg-gray-800",
 
